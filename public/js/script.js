@@ -1,3 +1,4 @@
+
 const socket = io();
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -36,8 +37,9 @@ recognition.addEventListener("result", (e) => {
   //console.log(e.results); // e.results :SpeechRecognitionResult object
   const last = e.results.length - 1;
   const text = e.results[last][0].transcript;
-  console.log(text);
-  socket.emit("user message", text);
+  const lowerText = text.toLowerCase()
+  
+  socket.emit("user message", lowerText);
 });
 
 recognition.addEventListener("speechend", () => {
@@ -60,6 +62,7 @@ const botSpeak = (text) => {
 
 socket.on("bot message", (answer) => {
   const { msg, link } = answer;
+  console.log("message",msg);
   botSpeak(msg);
   if (link) {
     window.open(link, "_blank");
